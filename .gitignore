@@ -2,3 +2,5 @@ rails/logs
 rails/tmp
 rails/storage
 rails/node_modules
+rails/.bundle
+rails/log
