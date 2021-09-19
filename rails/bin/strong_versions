@@ -1,0 +1,5 @@
+# /usr/bin/bash
+
+gem install strong_versions
+
+strong_versions -a
