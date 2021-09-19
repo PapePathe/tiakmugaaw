@@ -1,7 +1,7 @@
 FROM ruby:3.0.2-alpine
 
-RUN apt-get update -qq && apt-get install -y postgresql-client
-RUN bundle config --global frozen 1
+RUN apk add --no-cache build-base postgresql-dev postgresql-client
+RUN bundle config --global frozen 0
 
 WORKDIR /opt/tmg/
 
@@ -12,4 +12,6 @@ RUN bundle install
 COPY . .
 
 EXPOSE $RAILS_PORT
-ENTRYPOINT ["./entrypoint.sh"]
+
+CMD bundle exec rails s -b 0.0.0.0 -p 2722
+#ENTRYPOINT ["./bin/entrypoint"]
