@@ -2,4 +2,4 @@
 
 gem install standardrb
 
-standardrb
+standardrb --fail-fast
