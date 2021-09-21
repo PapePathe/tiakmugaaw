@@ -37,6 +37,8 @@ gem "image_processing", "~> 1.2"
 # Timezone info data
 gem "tzinfo-data", "~> 1.2021"
 
+gem "rexml", "~> 3.2"
+
 group :test do
   # Use capybara to test drive our ui []https://github.com/teamcapybara/capybara
   gem "capybara", "~> 3.35"
@@ -55,7 +57,7 @@ group :development, :test do
   # Use factory bot to quickly generate test data [https://github.com/thoughtbot/factory_bot]
   gem "factory_bot_rails", "~> 6.2"
 
-  # Use webdrivers to manage browsers we use to test the app [
+  # Use webdrivers to manage browsers we use to test the app []
   gem "webdrivers", "~> 4.6"
 end
 
@@ -63,13 +65,11 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console", "~> 4.1"
 
-  gem "strong_versions", "~> 0.4.5"
-
-  gem "bundler-audit", "~> 0.9.0"
-
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   gem "rack-mini-profiler", "~> 2.3", ">= 2.3.3"
 
   gem "guard", "~> 2.18"
   gem "guard-rspec", "~> 4.7"
 end
+
+gem "stackprof", "~> 0.2.17"
