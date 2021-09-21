@@ -4,3 +4,4 @@ rails/storage
 rails/node_modules
 rails/.bundle
 rails/log
+docker
