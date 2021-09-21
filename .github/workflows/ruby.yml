@@ -55,6 +55,12 @@ jobs:
         bundle exec reek
 
     - name: Run tests
+      run: |
+        bundle exec rails db:create
+         bundle exec rails db:migrate
+         bundle exec rails db:rollback
+         bundle exec rails db:migrate
+         bundle exec rspec --fail-fast
       env:
         RAILS_ENV: test
         TMG_DATABASE_USER: tiakmugaaw_test
@@ -62,9 +68,3 @@ jobs:
         TMG_DATABASE_HOST: localhost
         TMG_DATABASE_PORT: 5432
         TMG_DATABASE_PASSWORD: tiakmugaaw_test
-      run: |
-        bundle exec rails db:create
-        bundle exec rails db:migrate
-        bundle exec rails db:rollback
-        bundle exec rails db:migrate
-        bundle exec rspec --fail-fast
