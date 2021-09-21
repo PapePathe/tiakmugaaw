@@ -32,7 +32,9 @@ module Tmg
     config.time_zone = "Africa/Dakar"
     config.eager_load_paths << Rails.root.join("lib")
 
-    config.generators.system_tests = true
+    config.generators.system_tests = "yes"
+    config.generators.helper = false
+    config.generators.request_specs = false
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
