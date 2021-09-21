@@ -64,7 +64,6 @@ jobs:
       env:
         RAILS_ENV: test
         TMG_DATABASE_USER: tiakmugaaw_test
-        TMG_DATABASE_USER: tiakmugaaw_test
         TMG_DATABASE_HOST: localhost
         TMG_DATABASE_PORT: 5432
         TMG_DATABASE_PASSWORD: tiakmugaaw_test
