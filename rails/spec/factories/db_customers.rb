@@ -11,6 +11,5 @@
 #
 FactoryBot.define do
   factory :db_customer do
-    
   end
 end

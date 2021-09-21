@@ -13,6 +13,5 @@
 #
 FactoryBot.define do
   factory :db_delivery_man do
-    
   end
 end

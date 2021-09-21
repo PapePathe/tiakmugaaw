@@ -56,7 +56,7 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
 
   # Use webdrivers to manage browsers we use to test the app [
-  gem 'webdrivers', '~> 4.6'
+  gem "webdrivers", "~> 4.6"
 end
 
 group :development do
@@ -73,5 +73,3 @@ group :development do
   gem "guard", "~> 2.18"
   gem "guard-rspec", "~> 4.7"
 end
-
-
