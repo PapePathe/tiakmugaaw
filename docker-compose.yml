@@ -1,6 +1,12 @@
 version: "3"
 
 services:
+  proxy:
+    image: nginx
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - '80:80'
   rails:
     build:
       context: ./rails
@@ -10,17 +16,53 @@ services:
     ports:
       - '2722:2722'
     volumes:
+      - ./rails:/opt/tmg
+    stdin_open: true
+    tty: true
+    environment:
+      - RAILS_ENV=development
+      - TMG_DATABASE_NAME=workbooker_api_test
+      - TMG_DATABASE_USER=xaragne
+      - TMG_DATABASE_HOST=db
+      - TMG_DATABASE_PORT=5432
+      - TMG_DATABASE_PASSWORD=xaragne
+      - TMG_APP_PORT=2722
+      - HUB_URL=http://chrome:4444/wd/hub
+    depends_on:
+      - chrome
+      - db
+
+  rspec:
+    entrypoint: ./bin/rspec-entrypoint
+    build:
+      context: ./rails
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - '2723:2723'
+    volumes:
       - ./rails:/app
     stdin_open: true
     environment:
       - RAILS_ENV=test
-      - RAILS_DB_NAME=workbooker_api_test
-      - RAILS_DB_USER=xaragne
-      - RAILS_DB_HOST=db
-      - RAILS_DB_PORT=5432
-      - RAILS_DB_PASSWORD=xaragne
-      - RAILS_APP_PORT=2722
+      - TMG_DATABASE_NAME=workbooker_api_test
+      - TMG_DATABASE_USER=xaragne
+      - TMG_DATABASE_HOST=db
+      - TMG_DATABASE_PORT=5432
+      - TMG_DATABASE_PASSWORD=xaragne
+      - TMG_APP_PORT=2723
+      - HUB_URL=http://chrome:4444/wd/hub
+    depends_on:
+      - chrome
+      - db
+      - redis
+      - influxdb
 
+  chrome:
+    image: selenium/standalone-chrome:3.141.59-zirconium
+    volumes:
+      - /dev/shm:/dev/shm
   db:
     image: postgres:13.0
     volumes:
