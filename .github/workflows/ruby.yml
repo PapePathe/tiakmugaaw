@@ -1,0 +1,70 @@
+name: Ruby
+defaults:
+  run:
+    working-directory: ./workook_api
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.6.8', '2.7.4', '3.0.2']
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ runner.os }}-gems-
+
+    - uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: latest
+        postgresql db: workook_api_test
+        postgresql user: workook_api_test
+        postgresql password: workook_api_test
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+
+    - name: Security checks for our depedencis
+      run: |
+        bundle install
+        bundle exec bundler-audit
+
+
+    - name: Audit security vulnerabilities with brakeman
+      run: |
+        bundle exec brakeman
+
+    - name: Audit gem dependencies for strong versions
+      run: |
+        bundle exec strong_versions
+
+    - name: Audit code smells with reek
+      run: |
+        bundle exec reek
+
+    - name: Run tests
+      env:
+        RAILS_ENV: test
+        TMG_DATABASE_USER: tiakmugaaw_test
+        TMG_DATABASE_USER: tiakmugaaw_test
+        TMG_DATABASE_HOST: localhost
+        TMG_DATABASE_PORT: 5432
+        TMG_DATABASE_PASSWORD: tiakmugaaw_test
+      run: |
+        bundle exec rails db:create
+        bundle exec rails db:migrate
+        bundle exec rails db:rollback
+        bundle exec rails db:migrate
+        bundle exec rspec --fail-fast
