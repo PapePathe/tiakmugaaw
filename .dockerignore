@@ -1,3 +1,4 @@
 rails/logs
 rails/tmp
 rails/Dockerfile
+.git
