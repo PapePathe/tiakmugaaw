@@ -1,7 +1,7 @@
 name: Ruby
 defaults:
   run:
-    working-directory: ./workook_api
+    working-directory: ./rails
 on:
   push:
     branches: [ master ]
@@ -38,7 +38,7 @@ jobs:
 
     - name: Run tests
       run: |
-        cd rails
+        bundle install
         bundle exec rails db:create
         bundle exec rails db:migrate
         bundle exec rails db:rollback
