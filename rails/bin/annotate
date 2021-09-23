@@ -1,0 +1,4 @@
+# /usr/bin/bash
+
+gem install annotate
+annotate --models

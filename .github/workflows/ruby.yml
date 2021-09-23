@@ -1,0 +1,65 @@
+name: RailsApp
+defaults:
+  run:
+    working-directory: ./rails
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.7.4', '3.0.2']
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/cache@v2
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ runner.os }}-gems-
+
+    - uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: latest
+        postgresql db: tiakmugaaw_test
+        postgresql user: tiakmugaaw_test
+        postgresql password: tiakmugaaw_test
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+
+    - name: Install Bundler
+      run: |
+        bundle install
+
+    - name: Run security checks
+      run: |
+        bundle exec strong_versions
+        bundle exec bundle-audit
+
+    - name: Run linters
+      run: |
+        bundle exec standardrb
+
+    - name: Run tests
+      run: |
+        bundle exec rails db:create
+        bundle exec rails db:migrate
+        bundle exec rails db:rollback
+        bundle exec rails db:migrate
+        bundle exec rspec --fail-fast
+      env:
+        RAILS_ENV: test
+        TMG_DATABASE_NAME: tiakmugaaw_test
+        TMG_DATABASE_USER: tiakmugaaw_test
+        TMG_DATABASE_HOST: localhost
+        TMG_DATABASE_PORT: 5432
+        TMG_DATABASE_PASSWORD: tiakmugaaw_test
