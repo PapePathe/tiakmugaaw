@@ -69,7 +69,15 @@ group :development do
   gem "rack-mini-profiler", "~> 2.3", ">= 2.3.3"
 
   gem "guard", "~> 2.18"
+
   gem "guard-rspec", "~> 4.7"
+
+  # Use bundler audit to check for known vulnerabilites in our deps [https://github.com/rubysec/bundler-audit]
+  gem "bundler-audit", "~> 0.9.0"
+
+  gem "standardrb", "~> 1.0"
+
+  gem "strong_versions", "~> 0.4.5"
 end
 
 gem "stackprof", "~> 0.2.17"

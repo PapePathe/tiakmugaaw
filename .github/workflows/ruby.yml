@@ -26,9 +26,9 @@ jobs:
     - uses: Harmon758/postgresql-action@v1.0.0
       with:
         postgresql version: latest
-        postgresql db: workook_api_test
-        postgresql user: workook_api_test
-        postgresql password: workook_api_test
+        postgresql db: tiakmugaaw_test
+        postgresql user: tiakmugaaw_test
+        postgresql password: tiakmugaaw_test
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
@@ -36,9 +36,21 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true
 
-    - name: Run tests
+    - name: Install Bundler
       run: |
         bundle install
+
+    - name: Run security checks
+      run: |
+        bundle exec strong_versions
+        bundle exec bundle-audit
+
+    - name: Run linters
+      run: |
+        bundle exec standardrb
+
+    - name: Run tests
+      run: |
         bundle exec rails db:create
         bundle exec rails db:migrate
         bundle exec rails db:rollback
@@ -46,6 +58,7 @@ jobs:
         bundle exec rspec --fail-fast
       env:
         RAILS_ENV: test
+        TMG_DATABASE_NAME: tiakmugaaw_test
         TMG_DATABASE_USER: tiakmugaaw_test
         TMG_DATABASE_HOST: localhost
         TMG_DATABASE_PORT: 5432
